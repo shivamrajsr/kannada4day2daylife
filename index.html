@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ಕನ್ನಡ ಕಲಿಯಿರಿ — Top 100 Kannada Sentences</title>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Noto+Sans+Kannada:wght@400;600&family=Noto+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #c0392b;
+    --gold: #e8a820;
+    --cream: #fdf6e3;
+    --dark: #1a1208;
+    --mid: #4a3728;
+    --light: #f5e6c8;
+    --white: #fffdf7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--dark);
+    font-family: 'Noto Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--dark);
+    color: var(--gold);
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 20px,
+      rgba(232,168,32,0.04) 20px,
+      rgba(232,168,32,0.04) 40px
+    );
+  }
+
+  .header-inner { position: relative; z-index: 1; }
+
+  .kannada-title {
+    font-family: 'Yatra One', cursive;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    color: var(--gold);
+    letter-spacing: 2px;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: rgba(232,168,32,0.7);
+    margin-top: 8px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-top: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .controls {
+    max-width: 900px;
+    margin: 24px auto 0;
+    padding: 0 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+    padding: 10px 16px;
+    border: 2px solid var(--gold);
+    border-radius: 6px;
+    background: var(--white);
+    font-size: 0.95rem;
+    outline: none;
+    font-family: inherit;
+    color: var(--dark);
+  }
+
+  .search-box:focus { border-color: var(--red); }
+
+  .filter-btn {
+    padding: 10px 16px;
+    border: 2px solid var(--mid);
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: inherit;
+    color: var(--mid);
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--dark);
+    border-color: var(--dark);
+    color: var(--gold);
+  }
+
+  .stats {
+    text-align: center;
+    color: var(--mid);
+    font-size: 0.85rem;
+    margin: 16px auto 0;
+    max-width: 900px;
+    padding: 0 20px;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid #e8d8b8;
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 0 16px;
+    align-items: start;
+    transition: box-shadow 0.2s, border-left-color 0.2s;
+    animation: fadeIn 0.3s ease forwards;
+    opacity: 0;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border-left-color: var(--red);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-num {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--gold);
+    background: var(--dark);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .card-body {}
+
+  .kannada {
+    font-family: 'Noto Sans Kannada', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.4;
+  }
+
+  .transliteration {
+    font-size: 0.85rem;
+    color: #888;
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  .tags-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tag-greet { background: #fef3c7; color: #92400e; }
+  .tag-polite { background: #dbeafe; color: #1e40af; }
+  .tag-daily { background: #d1fae5; color: #065f46; }
+  .tag-question { background: #ede9fe; color: #5b21b6; }
+  .tag-shop { background: #fce7f3; color: #9d174d; }
+  .tag-travel { background: #e0f2fe; color: #0c4a6e; }
+  .tag-food { background: #fef9c3; color: #713f12; }
+  .tag-emotion { background: #fce7f3; color: #831843; }
+  .tag-time { background: #f0fdf4; color: #14532d; }
+  .tag-help { background: #fff7ed; color: #7c2d12; }
+
+  .meanings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .meaning-box {
+    background: var(--cream);
+    border-radius: 6px;
+    padding: 6px 10px;
+  }
+
+  .meaning-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .meaning-text {
+    font-size: 0.9rem;
+    color: var(--mid);
+    font-weight: 500;
+  }
+
+  .usage-box {
+    background: #fff8ee;
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    padding: 6px 10px;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--mid);
+  }
+
+  .usage-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #bbb;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .hidden { display: none !important; }
+
+  .no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--mid);
+    font-size: 1.1rem;
+  }
+
+  footer {
+    text-align: center;
+    background: var(--dark);
+    color: rgba(232,168,32,0.5);
+    font-size: 0.8rem;
+    padding: 20px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="kannada-title">ಕನ್ನಡ ಕಲಿಯಿರಿ</div>
+    <div class="subtitle">Kannada Seekhiye</div>
+    <div class="badge">Top 100 Daily Sentences</div>
+  </div>
+</header>
+
+<div class="controls">
+  <input class="search-box" type="text" id="searchInput" placeholder="Search in Kannada, Hindi or English...">
+  <button class="filter-btn active" onclick="filterTag('all', this)">सभी</button>
+  <button class="filter-btn" onclick="filterTag('greet', this)">अभिवादन</button>
+  <button class="filter-btn" onclick="filterTag('daily', this)">रोज़ाना</button>
+  <button class="filter-btn" onclick="filterTag('question', this)">सवाल</button>
+  <button class="filter-btn" onclick="filterTag('shop', this)">खरीददारी</button>
+  <button class="filter-btn" onclick="filterTag('food', this)">खाना</button>
+  <button class="filter-btn" onclick="filterTag('travel', this)">सफर</button>
+  <button class="filter-btn" onclick="filterTag('emotion', this)">भावनाएं</button>
+</div>
+<div class="stats" id="statsLine">100 वाक्य दिखाए जा रहे हैं</div>
+
+<div class="container" id="cardContainer"></div>
+
+<footer>ಕನ್ನಡ ರಾಜ್ಯೋತ್ಸವ • Kannada Rajyotsava • कन्नड़ गौरव</footer>
+
+<script>
+const data = [
+  { k: "ನಮಸ್ಕಾರ", t: "Namaskāra", h: "नमस्कार", u: "किसी से भी मिलते समय अभिवादन के लिए — सुबह, दोपहर, शाम कभी भी।", tags: ["greet"] },
+  { k: "ಹೇಗಿದ್ದೀರಾ?", t: "Hēgiddīrā?", h: "आप कैसे हैं?", u: "किसी से हाल-चाल पूछने के लिए (formal)।", tags: ["greet"] },
+  { k: "ಚೆನ್ನಾಗಿದ್ದೇನೆ, ಧನ್ಯವಾದ", t: "Chennāgiddēne, dhanyavāda", h: "मैं ठीक हूँ, धन्यवाद", u: "जब कोई आपका हाल पूछे तो जवाब देने के लिए।", tags: ["greet", "polite"] },
+  { k: "ಧನ್ಯವಾದ", t: "Dhanyavāda", h: "धन्यवाद / शुक्रिया", u: "किसी का आभार व्यक्त करने के लिए।", tags: ["polite"] },
+  { k: "ದಯವಿಟ್ಟು", t: "Dayaviṭṭu", h: "कृपया / Please", u: "विनम्रता से कुछ माँगते समय।", tags: ["polite"] },
+  { k: "ಕ್ಷಮಿಸಿ", t: "Kṣamisi", h: "माफ़ करें / सॉरी", u: "गलती होने पर या किसी का ध्यान खींचने के लिए।", tags: ["polite"] },
+  { k: "ಹೌದು", t: "Haudu", h: "हाँ", u: "किसी बात से सहमति जताने के लिए।", tags: ["daily"] },
+  { k: "ಇಲ್ಲ", t: "Illa", h: "नहीं", u: "मना करने या असहमति जताने के लिए।", tags: ["daily"] },
+  { k: "ಸರಿ", t: "Sari", h: "ठीक है / ओके", u: "सहमति या स्वीकृति देने के लिए।", tags: ["daily"] },
+  { k: "ನಿಮ್ಮ ಹೆಸರೇನು?", t: "Nimma hesarēnu?", h: "आपका नाम क्या है?", u: "नया परिचय करते समय नाम जानने के लिए।", tags: ["question", "greet"] },
+  { k: "ನನ್ನ ಹೆಸರು ___", t: "Nanna hesaru ___", h: "मेरा नाम ___ है", u: "अपना परिचय देते समय।", tags: ["greet", "daily"] },
+  { k: "ನೀವು ಎಲ್ಲಿಂದ ಬಂದಿದ್ದೀರಾ?", t: "Nīvu ellindu bandiddīrā?", h: "आप कहाँ से आए हैं?", u: "किसी के मूल स्थान के बारे में पूछने के लिए।", tags: ["question"] },
+  { k: "ಇದು ಎಷ್ಟು?", t: "Idu eṣṭu?", h: "यह कितने का है?", u: "दुकान में कीमत पूछने के लिए।", tags: ["shop", "question"] },
+  { k: "ಅದು ತುಂಬಾ ದುಬಾರಿ", t: "Adu tumbā dubāri", h: "यह बहुत महंगा है", u: "जब दाम ज़्यादा लगे तो कहने के लिए।", tags: ["shop"] },
+  { k: "ಕಡಿಮೆ ಮಾಡಿ", t: "Kaḍime māḍi", h: "कम करो / थोड़ा कम कर दो", u: "मोलभाव करते समय।", tags: ["shop"] },
+  { k: "ಒಂದು ನಿಮಿಷ", t: "Ondu nimiṣa", h: "एक मिनट", u: "किसी को रुकने के लिए कहना।", tags: ["daily"] },
+  { k: "ಅರ್ಥವಾಯಿತು", t: "Arthavāyitu", h: "समझ गया / समझ आ गई", u: "कुछ समझ आने पर।", tags: ["daily"] },
+  { k: "ನನಗೆ ಅರ್ಥವಾಗಲಿಲ್ಲ", t: "Nanage arthavāgalilla", h: "मुझे समझ नहीं आया", u: "कुछ समझ न आने पर।", tags: ["daily"] },
+  { k: "ದಯವಿಟ್ಟು ಮತ್ತೊಮ್ಮೆ ಹೇಳಿ", t: "Dayaviṭṭu mattomme hēḷi", h: "कृपया फिर से बताइए", u: "जब बात सुनाई न दे या समझ न आए।", tags: ["polite", "daily"] },
+  { k: "ನೀವು ಕನ್ನಡ ಮಾತನಾಡುತ್ತೀರಾ?", t: "Nīvu kannaḍa mātanāḍuttīrā?", h: "क्या आप कन्नड़ बोलते हैं?", u: "भाषा की जाँच करने के लिए।", tags: ["question"] },
+  { k: "ನಾನು ಕನ್ನಡ ಕಲಿಯುತ್ತಿದ್ದೇನೆ", t: "Nānu kannaḍa kaliyuttiddēne", h: "मैं कन्नड़ सीख रहा/रही हूँ", u: "नई भा�ा सीखते वक्त परिचय के लिए।", tags: ["daily"] },
+  { k: "ಶೌಚಾಲಯ ಎಲ್ಲಿದೆ?", t: "Śaucālaya ellide?", h: "टॉयलेट कहाँ है?", u: "सार्वजनिक स्थान पर टॉयलेट ढूँढने के लिए।", tags: ["travel", "question"] },
+  { k: "ಬಸ್ ನಿಲ್ದಾಣ ಎಲ್ಲಿದೆ?", t: "Bas nildāṇa ellide?", h: "बस स्टैंड कहाँ है?", u: "बस स्टेशन का रास्ता पूछने के लिए।", tags: ["travel", "question"] },
+  { k: "ಆಸ್ಪತ್ರೆ ಎಲ್ಲಿದೆ?", t: "Āspatre ellide?", h: "अस्पताल कहाँ है?", u: "अस्पताल खोजने के लिए।", tags: ["travel", "question"] },
+  { k: "ನನಗೆ ಹಸಿವಾಗಿದೆ", t: "Nanage hasivāgide", h: "मुझे भूख लगी है", u: "जब भूख लगी हो।", tags: ["food", "daily"] },
+  { k: "ನನಗೆ ನೀರು ಬೇಕು", t: "Nanage nīru bēku", h: "मुझे पानी चाहिए", u: "पानी माँगने के लिए।", tags: ["food", "daily"] },
+  { k: "ಊಟ ತುಂಬಾ ರುಚಿಯಾಗಿದೆ", t: "Ūṭa tumbā ruciyāgide", h: "खाना बहुत स्वादिष्ट है", u: "खाने की तारीफ़ करने के लिए।", tags: ["food"] },
+  { k: "ಬಿಲ್ ತರಿ", t: "Bil tari", h: "बिल लाओ", u: "रेस्तराँ में बिल माँगने के लिए।", tags: ["food", "shop"] },
+  { k: "ಮೆನು ತೋರಿಸಿ", t: "Menu tōrisi", h: "मेनू दिखाइए", u: "रेस्तराँ में मेनू माँगने के लिए।", tags: ["food"] },
+  { k: "ಇದು ಏನು?", t: "Idu ēnu?", h: "यह क्या है?", u: "अपरिचित चीज़ के बारे में पूछने के लिए।", tags: ["question"] },
+  { k: "ಅಲ್ಲಿ ಹೋಗಿ", t: "Alli hōgi", h: "वहाँ जाओ", u: "दिशा बताते समय।", tags: ["travel", "daily"] },
+  { k: "ಇಲ್ಲಿ ನಿಲ್ಲಿ", t: "Illi nilli", h: "यहाँ रुको", u: "किसी को यहाँ रोकने के लिए।", tags: ["travel", "daily"] },
+  { k: "ಬೇಗ ಬನ್ನಿ", t: "Bēga banni", h: "जल्दी आइए", u: "किसी को जल्दी बुलाने के लिए।", tags: ["daily"] },
+  { k: "ನಿಧಾನ ಮಾಡಿ", t: "Nidhāna māḍi", h: "धीरे करो / आराम से", u: "किसी को धीमा करने के लिए।", tags: ["daily"] },
+  { k: "ಸಹಾಯ ಮಾಡಿ!", t: "Sahāya māḍi!", h: "मदद करो!", u: "आपात स्थिति में मदद माँगने के लिए।", tags: ["help"] },
+  { k: "ನನಗೆ ಸಹಾಯ ಬೇಕು", t: "Nanage sahāya bēku", h: "मुझे मदद चाहिए", u: "विनम्रता से सहायता माँगने के लिए।", tags: ["help", "polite"] },
+  { k: "ತೊಂದರೆ ಇಲ್ಲ", t: "Tondare illa", h: "कोई बात नहीं / No problem", u: "किसी की माफ़ी स्वीकार करने या आश्वासन देने के लिए।", tags: ["polite", "daily"] },
+  { k: "ಚಿಂತಿಸಬೇಡಿ", t: "Cintisabēḍi", h: "चिंता मत करो", u: "किसी को सांत्वना देने के लिए।", tags: ["emotion", "polite"] },
+  { k: "ಶುಭಾಶಯಗಳು", t: "Śubhāśayagaḷu", h: "शुभकामनाएं", u: "किसी भी अवसर पर बधाई देने के लिए।", tags: ["greet"] },
+  { k: "ಹುಟ್ಟುಹಬ್ಬದ ಶುಭಾಶಯಗಳು", t: "Huṭṭuhabba da śubhāśayagaḷu", h: "जन्मदिन की शुभकामनाएं", u: "जन्मदिन पर बधाई देने के लिए।", tags: ["greet"] },
+  { k: "ಯಾವ ಸಮಯ?", t: "Yāva samaya?", h: "कितने बजे हैं?", u: "समय पूछने के लिए।", tags: ["time", "question"] },
+  { k: "ಎಷ್ಟು ದೂರ?", t: "Eṣṭu dūra?", h: "कितनी दूर है?", u: "किसी जगह की दूरी पूछने के लिए।", tags: ["travel", "question"] },
+  { k: "ಬಲಕ್ಕೆ ತಿರುಗಿ", t: "Balakke tirugi", h: "दाएं मुड़ो", u: "रास्ता बताते समय।", tags: ["travel"] },
+  { k: "ಎಡಕ್ಕೆ ತಿರುಗಿ", t: "Eḍakke tirugi", h: "बाएं मुड़ो", u: "रास्ता बताते समय।", tags: ["travel"] },
+  { k: "ನೇರ ಹೋಗಿ", t: "Nēra hōgi", h: "सीधे जाओ", u: "सीधे रास्ते पर चलने का निर्देश।", tags: ["travel"] },
+  { k: "ನಾನು ತಡ ಆಯಿತು", t: "Nānu taḍa āyitu", h: "मुझे देर हो गई", u: "देर से आने पर माफी माँगते समय।", tags: ["daily", "polite"] },
+  { k: "ನಾಳೆ ಭೇಟಿ ಆಗೋಣ", t: "Nāḷe bhēṭi āgōṇa", h: "कल मिलते हैं", u: "अगले दिन मिलने की बात तय करते समय।", tags: ["daily", "greet"] },
+  { k: "ಶುಭ ರಾತ್ರಿ", t: "Śubha rātri", h: "शुभ रात्रि / Good Night", u: "रात को विदा लेते समय।", tags: ["greet"] },
+  { k: "ಶುಭ ಮುಂಜಾನೆ", t: "Śubha muñjāne", h: "सुप्रभात / Good Morning", u: "सुबह अभिवादन करने के लिए।", tags: ["greet"] },
+  { k: "ಇದು ಸರಿಯಾಗಿದೆ", t: "Idu sariyāgide", h: "यह सही है", u: "किसी काम या बात की पुष्टि करने के लिए।", tags: ["daily"] },
+  { k: "ಇದು ತಪ್ಪು", t: "Idu tappu", h: "यह गलत है", u: "कुछ गलत होने पर।", tags: ["daily"] },
+  { k: "ಮನೆ ಎಲ್ಲಿದೆ?", t: "Mane ellide?", h: "घर कहाँ है?", u: "किसी का या अपना घर खोजने के लिए।", tags: ["travel", "question"] },
+  { k: "ನಾನು ಬೆಂಗಳೂರಿನಲ್ಲಿ ಇದ್ದೇನೆ", t: "Nānu beṅgaḷūrinalli iddēne", h: "मैं बेंगलुरु में हूँ", u: "अपना ठिकाना बताने के लिए।", tags: ["daily"] },
+  { k: "ಟ್ಯಾಕ್ಸಿ ಬೇಕು", t: "Ṭyāksi bēku", h: "टैक्सी चाहिए", u: "टैक्सी बुलाने के लिए।", tags: ["travel"] },
+  { k: "ಅಂಗಡಿ ಎಲ್ಲಿದೆ?", t: "Angaḍi ellide?", h: "दुकान कहाँ है?", u: "दुकान का पता पूछने के लिए।", tags: ["shop", "travel", "question"] },
+  { k: "ನನಗೆ ಇದು ಬೇಡ", t: "Nanage idu bēḍa", h: "मुझे यह नहीं चाहिए", u: "किसी चीज़ को मना करने के लिए।", tags: ["daily", "shop"] },
+  { k: "ನಾನು ಖುಷಿಯಾಗಿದ್ದೇನೆ", t: "Nānu khuṣiyāgiddēne", h: "मैं खुश हूँ", u: "अपनी खुशी जताने के लिए।", tags: ["emotion"] },
+  { k: "ನನಗೆ ನೋವಾಗುತ್ತಿದೆ", t: "Nanage nōvāguttide", h: "मुझे दर्द हो रहा है", u: "दर्द या तकलीफ जताने के लिए।", tags: ["help", "emotion"] },
+  { k: "ಔಷಧ ಬೇಕು", t: "Auṣadha bēku", h: "दवाई चाहिए", u: "दवा माँगने के लिए।", tags: ["help"] },
+  { k: "ವೈದ್ಯರನ್ನು ಕರೆಯಿರಿ", t: "Vaidyarannu kareyiri", h: "डॉक्टर को बुलाओ", u: "आपातकाल में डॉक्टर बुलाने के लिए।", tags: ["help"] },
+  { k: "ನಂಗೆ ಜ್ವರ ಇದೆ", t: "Nange jvara ide", h: "मुझे बुखार है", u: "बीमारी बताने के लिए।", tags: ["help", "daily"] },
+  { k: "ಇಂದು ಹವಾಮಾನ ಚೆನ್ನಾಗಿದೆ", t: "Indu havāmāna chennāgide", h: "आज मौसम अच्छा है", u: "मौसम की तारीफ़ करने के लिए।", tags: ["daily"] },
+  { k: "ತುಂಬಾ ಧನ್ಯವಾದ", t: "Tumbā dhanyavāda", h: "बहुत बहुत धन्यवाद", u: "विशेष आभार व्यक्त करने के लिए।", tags: ["polite"] },
+  { k: "ಸ್ವಾಗತ", t: "Svāgata", h: "स्वागत है / Welcome", u: "किसी का स्वागत करने के लिए।", tags: ["greet", "polite"] },
+  { k: "ಒಳ್ಳೆಯ ದಿನ", t: "Oḷḷeya dina", h: "अच्छा दिन हो", u: "विदाई पर शुभकामना देने के लिए।", tags: ["greet"] },
+  { k: "ಹೋಗಿ ಬರ್ತೇನೆ", t: "Hōgi bartēne", h: "जा रहा/रही हूँ, फिर आऊँगा/आऊँगी", u: "घर से निकलते वक्त कहने के लिए।", tags: ["greet", "daily"] },
+  { k: "ಬನ್ನಿ", t: "Banni", h: "आइए / आओ", u: "किसी को अंदर बुलाने के लिए।", tags: ["daily", "greet"] },
+  { k: "ಕುಳಿತುಕೊಳ್ಳಿ", t: "Kuḷitukoḷḷi", h: "बैठिए", u: "किसी को बैठने को कहने के लिए।", tags: ["polite", "daily"] },
+  { k: "ನೀರು ಕೊಡಿ", t: "Nīru koḍi", h: "पानी दीजिए", u: "पानी माँगने के लिए।", tags: ["food", "polite"] },
+  { k: "ಕಾಫಿ ಬೇಕಾ?", t: "Kāphi bēkā?", h: "कॉफी चाहिए?", u: "कॉफी ऑफर करने के लिए।", tags: ["food"] },
+  { k: "ಏನು ಬೇಕು?", t: "Ēnu bēku?", h: "क्या चाहिए?", u: "कोई मदद या ज़रूरत पूछने के लिए।", tags: ["question", "shop"] },
+  { k: "ಬೆಲೆ ಕಡಿಮೆ ಮಾಡು", t: "Bele kaḍime māḍu", h: "दाम कम करो", u: "मोलभाव करने के लिए।", tags: ["shop"] },
+  { k: "ಇದು ಉತ್ತಮ", t: "Idu uttama", h: "यह बहुत अच्छा है", u: "किसी चीज़ की तारीफ़ के लिए।", tags: ["daily"] },
+  { k: "ನಾನು ಒಪ್ಪುತ್ತೇನೆ", t: "Nānu opputēne", h: "मैं सहमत हूँ", u: "किसी बात से राज़ी होने के लिए।", tags: ["daily"] },
+  { k: "ನನ್ನ ಅಭಿಪ್ರಾಯ ಬೇರೆ", t: "Nanna abhiprāya bēre", h: "मेरी राय अलग है", u: "विनम्रता से असहमति जताने के लिए।", tags: ["daily", "polite"] },
+  { k: "ಏಕೆ?", t: "Ēke?", h: "क्यों?", u: "कारण पूछने के लिए।", tags: ["question"] },
+  { k: "ಯಾವಾಗ?", t: "Yāvāga?", h: "कब?", u: "समय पूछने के लिए।", tags: ["question", "time"] },
+  { k: "ಎಲ್ಲಿ?", t: "Elli?", h: "कहाँ?", u: "स्थान पूछने के लिए।", tags: ["question"] },
+  { k: "ಯಾರು?", t: "Yāru?", h: "कौन?", u: "व्यक्ति के बारे में पूछने के लिए।", tags: ["question"] },
+  { k: "ಹೇಗೆ?", t: "Hēge?", h: "कैसे?", u: "तरीका पूछने के लिए।", tags: ["question"] },
+  { k: "ಎಷ್ಟು?", t: "Eṣṭu?", h: "कितना?", u: "मात्रा या संख्या पूछने के लिए।", tags: ["question", "shop"] },
+  { k: "ಮತ್ತೆ ಸಿಗೋಣ", t: "Matte sigōṇa", h: "फिर मिलेंगे", u: "किसी से विदाई लेते समय।", tags: ["greet"] },
+  { k: "ನಿಮ್ಮ ಫೋನ್ ನಂಬರ್ ಕೊಡಿ", t: "Nimma phōn nambar koḍi", h: "अपना फोन नंबर दीजिए", u: "संपर्क नंबर माँगने के लिए।", tags: ["daily"] },
+  { k: "ಕರೆ ಮಾಡಿ", t: "Kare māḍi", h: "फोन करो / कॉल करो", u: "कॉल करने के लिए कहने पर।", tags: ["daily"] },
+  { k: "ಸಂತೋಷ", t: "Santōṣa", h: "बहुत खुशी हुई (मिलकर)", u: "मिलते समय या खुशी जताने के लिए।", tags: ["greet", "emotion"] },
+  { k: "ಅದ್ಭುತ!", t: "Adbhuta!", h: "शानदार! / वाह!", u: "किसी बात पर आश्चर्य या प्रशंसा जताने के लिए।", tags: ["emotion"] },
+  { k: "ನಾನು ಬೇಸರವಾಗಿದ್ದೇನೆ", t: "Nānu bēsaravāgiddēne", h: "मैं उदास हूँ", u: "दुखी होने पर अपनी भावना बताने के लिए।", tags: ["emotion"] },
+  { k: "ತುಂಬಾ ಸಂತೋಷ", t: "Tumbā santōṣa", h: "बहुत खुशी है", u: "अत्यधिक खुशी जताने के लिए।", tags: ["emotion"] },
+  { k: "ಮಳೆ ಬರ್ತಿದೆ", t: "Maḷe bartide", h: "बारिश आ रही है", u: "बारिश के बारे में बताने के लिए।", tags: ["daily"] },
+  { k: "ಬೇಗ ಹೋಗು", t: "Bēga hōgu", h: "जल्दी जाओ", u: "किसी को जल्दी भेजने के लिए।", tags: ["daily"] },
+  { k: "ಇಲ್ಲಿ ಬಾ", t: "Illi bā", h: "यहाँ आओ", u: "किसी को बुलाने के लिए (informal)।", tags: ["daily"] },
+  { k: "ಬಾಯಾರಿಕೆ ಆಗಿದೆ", t: "Bāyārike āgide", h: "प्यास लगी है", u: "प्यास लगने पर।", tags: ["food", "daily"] },
+  { k: "ಇದು ತಂಪಾಗಿದೆ", t: "Idu tampāgide", h: "यह ठंडा है", u: "किसी चीज़ के ठंडे होने पर।", tags: ["daily", "food"] },
+  { k: "ಬಿಸಿ ಇದೆ", t: "Bisi ide", h: "गर्म है", u: "किसी चीज़ के गरम होने पर।", tags: ["daily", "food"] },
+  { k: "ಅಕ್ಕ / ಅಣ್ಣ", t: "Akka / Aṇṇa", h: "दीदी / भैया", u: "बड़ी बहन या बड़े भाई को संबोधित करने के लिए।", tags: ["daily"] },
+  { k: "ಅಮ್ಮ / ಅಪ್ಪ", t: "Amma / Appa", h: "माँ / पापा", u: "माँ-बाप को बुलाने के लिए।", tags: ["daily"] },
+  { k: "ಮಕ್ಕಳು ಎಷ್ಟು?", t: "Makkaḷu eṣṭu?", h: "कितने बच्चे हैं?", u: "परिवार के बारे में पूछने के लिए।", tags: ["question", "daily"] },
+  { k: "ಕೆಲಸ ಏನು?", t: "Kelasa ēnu?", h: "काम क्या करते हैं?", u: "पेशे के बारे में पूछने के लिए।", tags: ["question", "daily"] },
+  { k: "ತಡ ಮಾಡಬೇಡಿ", t: "Taḍa māḍabēḍi", h: "देर मत करो", u: "जल्दी करने को कहने के लिए।", tags: ["daily"] },
+  { k: "ನಾನು ಬರ್ತೇನೆ", t: "Nānu bartēne", h: "मैं आऊँगा/आऊँगी", u: "आने का वादा करने के लिए।", tags: ["daily"] },
+  { k: "ಬ್ಯಾಗ್ ಎಲ್ಲಿದೆ?", t: "Byāg ellide?", h: "बैग कहाँ है?", u: "सामान खोजने के लिए।", tags: ["daily", "question"] },
+  { k: "ಹಣ ಇಲ್ಲ", t: "Haṇa illa", h: "पैसे नहीं हैं", u: "पैसे न होने की बात कहने के लिए।", tags: ["shop", "daily"] },
+  { k: "ಎಟಿಎಂ ಎಲ್ಲಿದೆ?", t: "Eṭiem ellide?", h: "ATM कहाँ है?", u: "ATM खोजने के लिए।", tags: ["travel", "question", "shop"] },
+];
+
+let currentTag = 'all';
+
+function renderCards(items) {
+  const container = document.getElementById('cardContainer');
+  container.innerHTML = '';
+  if (items.length === 0) {
+    container.innerHTML = '<div class="no-results">कोई वाक्य नहीं मिला 🔍</div>';
+    document.getElementById('statsLine').textContent = '0 वाक्य मिले';
+    return;
+  }
+  document.getElementById('statsLine').textContent = `${items.length} वाक्य दिखाए जा रहे हैं`;
+  items.forEach((item, idx) => {
+    const tagBadges = item.tags.map(t => `<span class="tag tag-${t}">${tagLabel(t)}</span>`).join('');
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.animationDelay = `${Math.min(idx * 0.03, 0.5)}s`;
+    card.innerHTML = `
+      <div class="card-num">${data.indexOf(item) + 1}</div>
+      <div class="card-body">
+        <div class="kannada">${item.k}</div>
+        <div class="transliteration">${item.t}</div>
+        <div class="tags-row">${tagBadges}</div>
+        <div class="meanings">
+          <div class="meaning-box">
+            <div class="meaning-label">हिंदी अर्थ</div>
+            <div class="meaning-text">${item.h}</div>
+          </div>
+        </div>
+        <div class="usage-box">
+          <div class="usage-label">उपयोग</div>
+          ${item.u}
+        </div>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function tagLabel(t) {
+  const map = { greet:'अभिवादन', polite:'शिष्टाचार', daily:'रोज़ाना', question:'सवाल', shop:'खरीददारी', travel:'सफर', food:'खाना', emotion:'भावनाएं', time:'समय', help:'मदद' };
+  return map[t] || t;
+}
+
+function filterTag(tag, btn) {
+  currentTag = tag;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let filtered = data.filter(item => {
+    const tagMatch = currentTag === 'all' || item.tags.includes(currentTag);
+    const textMatch = !q || item.k.includes(q) || item.h.toLowerCase().includes(q) || item.t.toLowerCase().includes(q) || item.u.toLowerCase().includes(q);
+    return tagMatch && textMatch;
+  });
+  renderCards(filtered);
+}
+
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+renderCards(data);
+</script>
+</body>
+</html>
